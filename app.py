@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 from markov_model import prediksi_markov
@@ -34,14 +33,22 @@ if st.button("🔮 Prediksi"):
         uji_df = df.tail(jumlah_uji)
         total = 0
         benar = 0
-        for idx, row in uji_df.iterrows():
-            actual = f"{int(row['angka']):04d}"
-            if metode == "Markov":
-                pred = prediksi_markov(df.iloc[:idx])
-            else:
-                pred = prediksi_ai(df)
-            match = sum([p == a for p, a in zip(pred, actual)])
-            benar += match
-            total += 4
-        akurasi_total = (benar / total) * 100
-        st.info(f"📈 Akurasi per digit (dari {jumlah_uji} data): {akurasi_total:.2f}%")
+
+        for i in range(jumlah_uji):
+            subset_df = df.iloc[:-(jumlah_uji - i)]
+            if len(subset_df) >= 11:
+                if metode == "LSTM AI":
+                    pred = prediksi_ai(subset_df)
+                else:
+                    pred = prediksi_markov(subset_df)
+
+                actual = f"{int(uji_df.iloc[i]['angka']):04d}"
+                match = sum([p == a for p, a in zip(pred, actual)])
+                benar += match
+                total += 4
+
+        if total > 0:
+            akurasi_total = (benar / total) * 100
+            st.info(f"📈 Akurasi per digit (dari {jumlah_uji} data): {akurasi_total:.2f}%")
+        else:
+            st.warning("❌ Tidak cukup data untuk menghitung akurasi.")
