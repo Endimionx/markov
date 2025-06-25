@@ -15,7 +15,7 @@ df = pd.DataFrame({"angka": data_lines})
 angka_aktual = st.text_input("❓ Masukkan angka aktual (untuk uji akurasi, opsional):", "")
 
 # Jumlah data uji
-jumlah_uji = st.number_input("📊 Jumlah data uji terakhir:", min_value=1, max_value=50, value=5, step=1)
+jumlah_uji = st.number_input("📊 Jumlah data uji terakhir:", min_value=1, max_value=500, value=5, step=1)
 
 # Pilih metode prediksi
 metode = st.selectbox("🧠 Pilih Metode Prediksi", ["Markov", "LSTM AI"])
